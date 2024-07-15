@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+    http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd ">
+ 
+            <!-- <changeSet author="Mike" id="1234" context="deployment_1A">
+                <tagDatabase tag="1A"/>
+            </changeSet> -->
+
+    <changeSet author="amalik" id="sales" >
+        <sqlFile path="pre-deploy/01_sales.sql"/>
+        <rollback>
+            <sqlFile path="rollback/01_sales_rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="amalik" id="employee" >
+        <sqlFile path="pre-deploy/02_employee.sql"/>
+        <rollback>
+            <sqlFile path="rollback/02_employee_rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="amalik" id="contractor" >
+        <sqlFile path="pre-deploy/03_contractor.sql"/>
+        <rollback>
+            <sqlFile path="rollback/03_contractor_rollback.sql"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

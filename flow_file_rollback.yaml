@@ -1,0 +1,39 @@
+# flow-file.yaml
+# Author: Adeel Malik
+
+stages:
+  validateChangelog:
+    # Run validate on Repo Changelog
+    # https://docs.liquibase.com/commands/update/validate.html
+    actions:
+      - type: liquibase
+        command: validate
+        cmdArgs: { changelog-file: "changelog.xml" }
+
+      # Show database status
+      # https://docs.liquibase.com/commands/change-tracking/status.html
+      - type: liquibase
+        command: status
+        cmdArgs: { changelog-file: "changelog.xml", verbose: "true" }
+
+  liquibaseRollback:
+    # Run Update on Latest Repo State
+    # https://docs.liquibase.com/commands/update/update-sql.html
+    actions:
+    #   - type: liquibase
+    #     command: rollbackOneUpdate-sql
+    #     cmdArgs: { }
+
+    # # Run Update on Latest Repo State
+    # # https://docs.liquibase.com/commands/update/update.html
+      - type: liquibase
+        command: rollbackOneUpdate
+        cmdArgs: { force: "true" }
+
+endStage:
+  actions:
+    # Show history
+    # https://docs.liquibase.com/commands/change-tracking/history.html
+    - type: liquibase
+      command: history
+      cmdArgs: {}
