@@ -11,7 +11,7 @@
                 <tagDatabase tag="1A"/>
             </changeSet> -->
 
-    <changeSet author="amalik" id="sales" >
+    <changeSet author="amalik" id="sales" labels="sales" >
         <sqlFile path="pre-deploy/01_sales.sql"/>
         <rollback>
             <sqlFile path="rollback/01_sales_rollback.sql"/>
@@ -31,5 +31,14 @@
             <sqlFile path="rollback/03_contractor_rollback.sql"/>
         </rollback>
     </changeSet>
+
+    <!-- <changeSet author="amalik" id="PASP-20815_Passport" runWith="sqlcmd">
+        <sqlFile path="pre-deploy/PASP-20815_Passport.sql"/>
+    </changeSet>  
+
+    <changeSet author="amalik" id="ups" runWith="sqlcmd">
+        <sqlFile path="pre-deploy/ups.sql"/>
+    </changeSet>   -->
+
 
 </databaseChangeLog>

@@ -3,37 +3,69 @@
 
 stages:
   validateChangelog:
-    # Run validate on Repo Changelog
-    # https://docs.liquibase.com/commands/update/validate.html
     actions:
       - type: liquibase
         command: validate
-        cmdArgs: { changelog-file: "changelog.xml" }
 
-      # Show database status
-      # https://docs.liquibase.com/commands/change-tracking/status.html
       - type: liquibase
         command: status
-        cmdArgs: { changelog-file: "changelog.xml", verbose: "true" }
+
+  DriftDetection:
+    actions:
+      - type: liquibase
+        command: diff
+        cmdArgs: { 
+          format: "JSON",
+          reference-url: "offline:sqlserver?snapshot=snapshot.json"
+        }
+        globalArgs: { 
+          output-file: "diff.json",
+          report-name: "diff.html"
+        }
+
+  PolicyChecks:
+    actions:
+      - type: liquibase
+        command: checks run
+        cmdArgs: { 
+          checks-settings-file: "policychecks/liquibase.checks-settings.conf"
+        }
+        globalArgs: { 
+          report-name: "checks.html"
+        }
 
   liquibaseUpdate:
-    # Run Update on Latest Repo State
-    # https://docs.liquibase.com/commands/update/update-sql.html
     actions:
-    #   - type: liquibase
-    #     command: update-sql
-    #     cmdArgs: { }
-
-    # # Run Update on Latest Repo State
-    # # https://docs.liquibase.com/commands/update/update.html
       - type: liquibase
-        command: update
+        command: update-sql
         cmdArgs: { }
+
+      - type: liquibase
+        # if: "${IS_ROLLBACK} == false"
+        command: tag
+        cmdArgs: { tag: "adeelM-demo"}
+      - type: liquibase
+        # if: "${IS_ROLLBACK} == false"
+        command: update
+
+    # - type: liquibase
+    #   if: "${IS_ROLLBACK} == true"
+    #   command: rollbackOneUpdate
+    #   cmdArgs: { force: "true" }
+
+  Snapshot:
+    actions:
+      - type: liquibase
+        command: snapshot
+        cmdArgs: { 
+          snapshot-format: "JSON"
+        }
+        globalArgs: { 
+          output-file: "snapshot.json"
+        }
 
 endStage:
   actions:
-    # Show history
-    # https://docs.liquibase.com/commands/change-tracking/history.html
     - type: liquibase
       command: history
       cmdArgs: {}
